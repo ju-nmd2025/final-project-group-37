@@ -11,27 +11,27 @@ export default class Character {
     strokeWeight(3);
     fill(100, 90, 200, 250);
     stroke(100, 70, 200, 250);
-    circle(this.x + this.w / 2, this.y + this.h * 0.7, this.w * 0.75);
+    circle(this.x + 200, this.y + 140, 150);
 
     strokeWeight(3);
     fill(80, 70, 200, 250);
     stroke(80, 50, 200, 250);
-    circle(this.x + this.w * 0.25, this.y + this.h * 0.2, this.w * 0.35);
+    circle(this.x + 150, this.y + 50, 70);
 
     strokeWeight(3);
     fill(200, 20, 200, 250);
     stroke(70, 40, 200, 250);
-    circle(this.x + this.w * 0.25, this.y + this.h * 0.2, this.w * 0.2);
+    circle(this.x + 150, this.y + 50, 40);
 
     strokeWeight(3);
     fill(80, 70, 200, 250);
     stroke(80, 50, 200, 250);
-    circle(this.x + this.w * 0.75, this.y + this.h * 0.2, this.w * 0.35);
+    circle(this.x + 250, this.y + 50, 70);
 
     strokeWeight(3);
     fill(200, 20, 200, 250);
     stroke(70, 40, 200, 250);
-    circle(this.x + this.w * 0.75, this.y + this.h * 0.2, this.w * 0.2);
+    circle(this.x + 250, this.y + 50, 40);
   }
 
   isColliding(character, platform) {

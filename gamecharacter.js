@@ -32,6 +32,24 @@ export default class Character {
     fill(200, 20, 200, 250);
     stroke(70, 40, 200, 250);
     circle(this.x + 250, this.y + 50, 40);
+
+    // base + ears
+
+    fill(250, 250, 250, 250);
+    noStroke();
+    ellipse(this.x + 170, this.y + 130, 30, 50); // left eye
+
+    fill(250, 250, 250, 250);
+    noStroke();
+    ellipse(this.x + 230, this.y + 130, 30, 50); // right eye
+
+    fill(10, 10, 10, 250);
+    noStroke();
+    ellipse(this.x + 170, this.y + 130, 20, 30); // left pupil
+
+    fill(10, 10, 10, 250);
+    noStroke();
+    ellipse(this.x + 230, this.y + 130, 20, 30); // right pupil
   }
 
   isColliding(character, platform) {

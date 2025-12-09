@@ -1,9 +1,30 @@
 function setup() {
   createCanvas(400, 600);
-  initPlatforms(); // Call the new initialization function
 }
 
 function draw() {
-  background(30);
-  updateAndDrawPlatforms(); // Call the updated function
+  if (gameState === "start") {
+    drawStartScreen();
+    return;
+  }
+
+  if (gameState === "playing") {
+    background(30);
+
+    updateAndDrawPlatforms();   
+    score++;
+
+    return;
+  }
+
+  if (gameState === "gameover") {
+    drawGameOverScreen(score);
+  }
+}
+
+function keyPressed() {
+  if (key === ' ') {
+    if (gameState === "start") startGame();
+    else if (gameState === "gameover") startGame();
+  }
 }

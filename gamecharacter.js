@@ -8,76 +8,117 @@ export default class Character {
   }
 
   draw() {
-    strokeWeight(3);
+    strokeWeight(1);
     fill(100, 90, 200, 250);
     stroke(100, 70, 200, 250);
-    circle(this.x + 200, this.y + 140, 150);
+    circle(this.x + this.w * 0.5, this.y + this.h * 0.55, this.w * 0.5);
 
-    strokeWeight(3);
+    strokeWeight(1);
     fill(80, 70, 200, 250);
     stroke(80, 50, 200, 250);
-    circle(this.x + 150, this.y + 50, 70);
+    circle(this.x + this.w * 0.25, this.y + this.h * 0.35, this.w * 0.2);
 
-    strokeWeight(3);
+    strokeWeight(1);
     fill(200, 20, 200, 250);
     stroke(70, 40, 200, 250);
-    circle(this.x + 150, this.y + 50, 40);
+    circle(this.x + this.w * 0.25, this.y + this.h * 0.35, this.w * 0.1);
 
-    strokeWeight(3);
+    strokeWeight(1);
     fill(80, 70, 200, 250);
     stroke(80, 50, 200, 250);
-    circle(this.x + 250, this.y + 50, 70);
+    circle(this.x + this.w * 0.75, this.y + this.h * 0.35, this.w * 0.2);
 
-    strokeWeight(3);
+    strokeWeight(1);
     fill(200, 20, 200, 250);
     stroke(70, 40, 200, 250);
-    circle(this.x + 250, this.y + 50, 40);
+    circle(this.x + this.w * 0.75, this.y + this.h * 0.35, this.w * 0.1);
 
     // base + ears
 
     fill(250, 250, 250, 250);
     noStroke();
-    ellipse(this.x + 170, this.y + 130, 30, 50); // left eye
+    ellipse(
+      this.x + this.w * 0.4,
+      this.y + this.h * 0.55,
+      this.w * 0.1,
+      this.h * 0.15
+    ); // left eye
 
     fill(250, 250, 250, 250);
     noStroke();
-    ellipse(this.x + 230, this.y + 130, 30, 50); // right eye
+    ellipse(
+      this.x + this.w * 0.6,
+      this.y + this.h * 0.55,
+      this.w * 0.1,
+      this.h * 0.15
+    ); // right eye
 
     fill(10, 10, 10, 250);
     noStroke();
-    ellipse(this.x + 170, this.y + 130, 20, 30); // left pupil
+    ellipse(
+      this.x + this.w * 0.4,
+      this.y + this.h * 0.55,
+      this.w * 0.05,
+      this.h * 0.1
+    ); // left pupil
 
     fill(10, 10, 10, 250);
     noStroke();
-    ellipse(this.x + 230, this.y + 130, 20, 30); // right pupil
+    ellipse(
+      this.x + this.w * 0.6,
+      this.y + this.h * 0.55,
+      this.w * 0.05,
+      this.h * 0.1
+    ); // right pupil
 
-    strokeWeight(3);
+    strokeWeight(1);
     fill(80, 70, 200, 250);
     stroke(70, 40, 200, 250);
-    arc(this.x + 200, this.y + 170, 60, 50, 0, PI); // mouth
+    arc(
+      this.x + this.w * 0.5,
+      this.y + this.h * 0.67,
+      this.w * 0.2,
+      this.h * 0.15,
+      0,
+      PI
+    ); // mouth
 
     fill(200, 20, 200, 250);
     noStroke();
-    circle(this.x + 150, this.y + 170, 20);
+    circle(this.x + this.w * 0.35, this.y + this.h * 0.65, this.w * 0.05);
 
     fill(200, 20, 200, 250);
     noStroke();
-    circle(this.x + 250, this.y + 170, 20);
+    circle(this.x + this.w * 0.65, this.y + this.h * 0.65, this.w * 0.05);
 
     // blush
 
     push();
-    strokeWeight(3);
+    strokeWeight(1);
     fill(80, 70, 200, 250);
     stroke(70, 40, 200, 250);
-    arc(this.x + 170, this.y + 130, 30, 50, PI, TWO_PI);
+    arc(
+      this.x + this.w * 0.4,
+      this.y + this.h * 0.55,
+      this.w * 0.1,
+      this.h * 0.2,
+      PI,
+      TWO_PI
+    );
     pop();
 
     push();
-    strokeWeight(3);
+    strokeWeight(1);
     fill(80, 70, 200, 250);
     stroke(70, 40, 200, 250);
-    arc(this.x + 230, this.y + 130, 30, 50, PI, TWO_PI);
+    arc(
+      this.x + this.w * 0.6,
+      this.y + this.h * 0.55,
+      this.w * 0.1,
+      this.h * 0.2,
+      PI,
+      TWO_PI
+    );
     pop();
 
     // eyelids

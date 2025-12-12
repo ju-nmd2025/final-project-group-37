@@ -10,8 +10,10 @@ function draw() {
 
   if (gameState === "playing") {
     background(30);
+
     updateAndDrawPlatforms();   
     score++;
+
     return;
   }
 

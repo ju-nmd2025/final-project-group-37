@@ -7,6 +7,10 @@ export default class Character {
     //		this.isOnPlatForm = false;
 
     this.speed = 3;
+
+    this.gravity = 0.6;
+    this.velocity = 0;
+    this.JumpStrength = -12;
   }
 
   draw() {
@@ -132,6 +136,11 @@ export default class Character {
   moveRight() {
     this.x += this.speed;
     this.x = constrain(this.x, 0, width - this.w);
+  }
+
+  update() {
+    this.velocity += this.gravity;
+    this.y += this.velocity;
   }
 
   isColliding(character, platform) {

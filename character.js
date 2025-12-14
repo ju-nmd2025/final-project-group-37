@@ -5,6 +5,8 @@ export default class Character {
     this.w = w;
     this.h = h;
     //		this.isOnPlatForm = false;
+
+    this.speed = 3;
   }
 
   draw() {
@@ -122,6 +124,14 @@ export default class Character {
     pop();
 
     // eyelids
+  }
+  moveLeft() {
+    this.x -= this.speed;
+    this.x = constrain(this.x, 0, width - this.w);
+  }
+  moveRight() {
+    this.x += this.speed;
+    this.x = constrain(this.x, 0, width - this.w);
   }
 
   isColliding(character, platform) {

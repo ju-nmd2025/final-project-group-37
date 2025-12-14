@@ -1,47 +1,138 @@
-export class Character {
-    constructor(x, y, w, h) {
-        this.x = x;    
-        this.y = y;     
-        this.w = w;     
-        this.h = h;      
-        this.speed = 5;  
-    }
+export default class Character {
+  constructor(x, y, w, h) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    //    this.isOnPlatForm = false;
+  }
 
-    draw() {
-        fill(255, 0, 0);  
-        rect(this.x, this.y, this.w, this.h);
-    }
+  draw() {
+    strokeWeight(1);
+    fill(100, 90, 200, 250);
+    stroke(100, 70, 200, 250);
+    circle(this.x + this.w * 0.5, this.y + this.h * 0.55, this.w * 0.5);
 
-    // Handle character movement based on key input
-    move() {
-        // Move left
-        if (keyIsDown(65) || keyIsDown(LEFT_ARROW)) {
-            this.x -= this.speed;
-        }
-        
-        // Move right
-        if (keyIsDown(68) || keyIsDown(RIGHT_ARROW)) {
-            this.x += this.speed;
-        }
-        
-        // Keep character within canvas bounds
-        if (this.x < 0) {
-            this.x = 0;
-        }
-        if (this.x + this.w > 400) {
-            this.x = 400 - this.w;
-        }
-    }
+    strokeWeight(1);
+    fill(80, 70, 200, 250);
+    stroke(80, 50, 200, 250);
+    circle(this.x + this.w * 0.25, this.y + this.h * 0.35, this.w * 0.2);
 
-    // AABB collision detection
-    isColliding(character, platform) {
-    // AABB collision detection
-        return (
-            character.x < platform.x + platform.w &&
-            character.x + character.w > platform.x &&
-            character.y + character.h >= platform.y &&
-            character.y + character.h <= platform.y + 10 &&
-            character.y < platform.y
-        );
+    strokeWeight(1);
+    fill(200, 20, 200, 250);
+    stroke(70, 40, 200, 250);
+    circle(this.x + this.w * 0.25, this.y + this.h * 0.35, this.w * 0.1);
+
+    strokeWeight(1);
+    fill(80, 70, 200, 250);
+    stroke(80, 50, 200, 250);
+    circle(this.x + this.w * 0.75, this.y + this.h * 0.35, this.w * 0.2);
+
+    strokeWeight(1);
+    fill(200, 20, 200, 250);
+    stroke(70, 40, 200, 250);
+    circle(this.x + this.w * 0.75, this.y + this.h * 0.35, this.w * 0.1);
+
+    // base + ears
+
+    fill(250, 250, 250, 250);
+    noStroke();
+    ellipse(
+      this.x + this.w * 0.4,
+      this.y + this.h * 0.55,
+      this.w * 0.1,
+      this.h * 0.15
+    ); // left eye
+
+    fill(250, 250, 250, 250);
+    noStroke();
+    ellipse(
+      this.x + this.w * 0.6,
+      this.y + this.h * 0.55,
+      this.w * 0.1,
+      this.h * 0.15
+    ); // right eye
+
+    fill(10, 10, 10, 250);
+    noStroke();
+    ellipse(
+      this.x + this.w * 0.4,
+      this.y + this.h * 0.55,
+      this.w * 0.05,
+      this.h * 0.1
+    ); // left pupil
+
+    fill(10, 10, 10, 250);
+    noStroke();
+    ellipse(
+      this.x + this.w * 0.6,
+      this.y + this.h * 0.55,
+      this.w * 0.05,
+      this.h * 0.1
+    ); // right pupil
+
+    strokeWeight(1);
+    fill(80, 70, 200, 250);
+    stroke(70, 40, 200, 250);
+    arc(
+      this.x + this.w * 0.5,
+      this.y + this.h * 0.67,
+      this.w * 0.2,
+      this.h * 0.15,
+      0,
+      PI
+    ); // mouth
+
+    fill(200, 20, 200, 250);
+    noStroke();
+    circle(this.x + this.w * 0.35, this.y + this.h * 0.65, this.w * 0.05);
+
+    fill(200, 20, 200, 250);
+    noStroke();
+    circle(this.x + this.w * 0.65, this.y + this.h * 0.65, this.w * 0.05);
+
+    // blush
+
+    push();
+    strokeWeight(1);
+    fill(80, 70, 200, 250);
+    stroke(70, 40, 200, 250);
+    arc(
+      this.x + this.w * 0.4,
+      this.y + this.h * 0.55,
+      this.w * 0.1,
+      this.h * 0.2,
+      PI,
+      TWO_PI
+    );
+    pop();
+
+    push();
+    strokeWeight(1);
+    fill(80, 70, 200, 250);
+    stroke(70, 40, 200, 250);
+    arc(
+      this.x + this.w * 0.6,
+      this.y + this.h * 0.55,
+      this.w * 0.1,
+      this.h * 0.2,
+      PI,
+      TWO_PI
+    );
+    pop();
+
+    // eyelids
+  }
+
+  isColliding(character, platform) {
+    if (
+      platform.y === character.y + character.w &&
+      platform.x <= character.x + character.w
+    ) {
+      return true;
+    } else {
+      return false;
     }
+  }
 }
+

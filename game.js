@@ -21,13 +21,6 @@ let character = new Character(50, 50, 50, 50);
 function draw() {
   background(100, 100, 100);
 
-  if (keyIsDown(LEFT_ARROW)) {
-    character.moveLeft();
-  }
-  if (keyIsDown(RIGHT_ARROW)) {
-    character.moveRight();
-  }
-
   character.draw();
   platform.draw();
 

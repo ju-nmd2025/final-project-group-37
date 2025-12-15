@@ -49,16 +49,6 @@ function getPlatform() {
 function draw() {
   background(100, 100, 100); // Grey background
 
-  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-    character.moveLeft();
-  }
-
-  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-    character.moveRight();
-  }
-
-  character.update();
-
   // Start screen
   if (gameState === 0) {
     fill(255);
@@ -85,6 +75,18 @@ function draw() {
     drawButton(125, 200, 150, 50, "Play Again");
     return;
   }
+
+  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+    character.vx -= character.speed;
+    character.moveLeft();
+  }
+
+  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+    character.vx += character.speed;
+    character.moveRight();
+  }
+
+  character.update();
 
   // Game in progress
   character.draw();

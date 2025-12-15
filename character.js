@@ -11,6 +11,8 @@ export default class Character {
     this.vx = 0;
     this.vy = 0;
     this.JumpStrength = -12;
+
+    this.isOnPlatform = false;
   }
 
   draw() {
@@ -130,6 +132,24 @@ export default class Character {
     // eyelids
   }
 
+  moveLeft() {
+    this.vx = -this.speed;
+    this.x += this.vx;
+    this.x = constrain(this.x, 0, width - this.w);
+  }
+
+  moveRight() {
+    this.vx = this.speed;
+    this.x += this.vx;
+    this.x = constrain(this.x, 0, width - this.w);
+  }
+  jump() {
+    if (this.isOnPlatform) {
+      this.vy = this.JumpStrength;
+      this.isOnPlatform = false;
+    }
+  }
+
   update() {
     this.vy += this.gravity;
     this.y += this.vy;
@@ -138,7 +158,6 @@ export default class Character {
     this.vx *= 0.9; // Friction
 
     this.x = constrain(this.x, 0, width - this.w);
-    this.y = constrain(this.y, 0, height - this.h); // Prevents the character falling beyond canvas
   }
 
   isColliding(character, platform) {

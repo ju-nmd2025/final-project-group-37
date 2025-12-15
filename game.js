@@ -49,6 +49,16 @@ function getPlatform() {
 function draw() {
   background(100, 100, 100); // Grey background
 
+  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+    character.moveLeft();
+  }
+
+  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+    character.moveRight();
+  }
+
+  character.update();
+
   // Start screen
   if (gameState === 0) {
     fill(255);

@@ -4,7 +4,6 @@ export default class Character {
     this.y = y;
     this.w = w;
     this.h = h;
-    //		this.isOnPlatForm = false;
 
     this.speed = 3;
     this.gravity = 0.6;
@@ -160,11 +159,23 @@ export default class Character {
     this.x = constrain(this.x, 0, width - this.w);
   }
 
-  isColliding(character, platform) {
-    if (
-      platform.y === character.y + character.w &&
-      platform.x <= character.x + character.w
-    ) {
+  isColliding(platform) {
+    // Collision detection with platforms
+
+    let characterBottom = this.y + this.h;
+    let platformTop = platform.y;
+    let characterRight = this.x + this.w;
+    let platformLeft = platform.x;
+    let platformRight = platform.x + platform.w;
+    let characterLeft = this.x;
+
+    let verticalCollision =
+      characterBottom >= platformTop && characterBottom - this.vy < platformTop;
+
+    let horizontalCollision =
+      characterRight > platformLeft && characterLeft < platformRight;
+
+    if (verticalCollision && horizontalCollision) {
       return true;
     } else {
       return false;

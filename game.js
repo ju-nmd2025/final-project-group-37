@@ -86,6 +86,17 @@ function draw() {
     character.moveRight();
   }
 
+  character.isOnPlatform = false;
+  let activePlatforms = platformManager.getActivePlatforms();
+  for (let i = 0; i < activePlatforms.length; i++) {
+    if (character.isColliding(activePlatforms[i])) {
+      character.isOnPlatform = true;
+      character.vy = 0;
+      character.y = activePlatforms[i].y - character.h;
+      break;
+    }
+  }
+
   character.update();
 
   // Game in progress

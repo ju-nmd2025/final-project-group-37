@@ -76,16 +76,7 @@ function draw() {
     return;
   }
 
-  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-    character.vx -= character.speed;
-    character.moveLeft();
-  }
-
-  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-    character.vx += character.speed;
-    character.moveRight();
-  }
-
+  // Check for collisions with platforms
   character.isOnPlatform = false;
   let activePlatforms = platformManager.getActivePlatforms();
   for (let i = 0; i < activePlatforms.length; i++) {
@@ -95,6 +86,22 @@ function draw() {
       character.y = activePlatforms[i].y - character.h;
       break;
     }
+  }
+
+  if (character.y + character.h >= floor) {
+    character.isOnPlatform = true;
+    character.vy = 0;
+    character.y = floor - character.h;
+  }
+
+  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+    character.vx -= character.speed;
+    character.moveLeft();
+  }
+
+  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+    character.vx += character.speed;
+    character.moveRight();
   }
 
   character.update();
@@ -132,12 +139,10 @@ function keyPressed() {
   // Only allow jumping when game is in progress
   if (gameState !== 1) return;
 
-  let platform = getPlatform();
-  if (
-    character.y + character.h === floor ||
-    (platform && character.isColliding(character, platform))
-  ) {
-    character.y -= 120;
+  if (character.isOnPlatform || character.y + character.h >= floor - 1) {
+    if (key === " " || key === "W" || key === "w" || keyCode === UP_ARROW) {
+      character.jump();
+    }
   }
 }
 

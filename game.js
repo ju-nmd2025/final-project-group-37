@@ -3,6 +3,8 @@ import Character from "./character";
 
 // Game state management
 let gameState = 0; // 0: Start, 1: Playing, 2: Game Over
+let score = 0; // starts counting the points from 0
+let scoredPlatforms = 0;
 // Button drawing and interaction
 function drawButton(x, y, w, h, label) {
   fill(100, 200, 100);
@@ -75,6 +77,13 @@ function draw() {
     return;
   }
 
+  push();
+  fill(255);
+  textSize(16);
+  textAlign(CENTER);
+  text("Score: " + Math.floor(score), 200, 30);
+  pop();
+
   if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
     character.vx -= character.speed;
     character.moveLeft();
@@ -113,6 +122,16 @@ function draw() {
 
   platformManager.update(scroll);
 
+  let activeCount = platformManager.getActivePlatforms().length;
+
+  if (scroll > 0) {
+    let removedPlatforms = scoredPlatforms - activeCount;
+    if (removedPlatforms > 0) {
+      score += removedPlatforms;
+    }
+  }
+  scoredPlatforms = activeCount;
+
   if (character.y > canvasHeight) {
     gameState = 2;
   }
@@ -135,9 +154,13 @@ function mousePressed() {
     gameState = 1;
     character = new Character(50, 10, 50, 50);
     platformManager.init();
+    scoredPlatforms = platformManager.getActivePlatforms().length;
+    score = 0;
   } else if (gameState === 2 && isMouseOnButton(125, 200, 150, 50)) {
     gameState = 1;
     character = new Character(50, 10, 50, 50);
     platformManager.init();
+    scoredPlatforms = platformManager.getActivePlatforms().length;
+    score = 0;
   }
 }

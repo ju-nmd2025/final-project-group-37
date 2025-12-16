@@ -5,6 +5,10 @@ import Character from "./character";
 let gameState = 0; // 0: Start, 1: Playing, 2: Game Over
 let score = 0; // starts counting the points from 0
 let scoredPlatforms = 0;
+
+// To track the last platform the character was on
+let lastPlatform = null;
+
 // Button drawing and interaction
 function drawButton(x, y, w, h, label) {
   fill(100, 200, 100);
@@ -57,9 +61,7 @@ function draw() {
     textAlign(CENTER);
     text("Doodle Jump", 200, 100);
     textSize(16);
-    text("Press SPACE to jump", 200, 150);
-    textSize(16);
-    text("WASD to move", 200, 170);
+    text("Press WASD to move", 200, 150);
     drawButton(125, 200, 150, 50, "Start Game");
     return;
   }
@@ -97,18 +99,36 @@ function draw() {
   character.update();
   character.isOnPlatform = false;
 
-  // Check for collisions with platforms
-
-  let activePlatforms = platformManager.getActivePlatforms();
-  for (let i = 0; i < activePlatforms.length; i++) {
-    let platform = activePlatforms[i];
-    if (character.vy >= 0 && character.isColliding(platform)) {
-      character.isOnPlatform = true;
-      character.jump();
-      character.y = platform.y - character.h;
-      break;
+  // Breaking platform logic
+  let currentPlatform = null; 
+// Track the platform the character is currently on
+let activePlatforms = platformManager.getActivePlatforms();
+for (let i = 0; i < activePlatforms.length; i++) {
+  let platform = activePlatforms[i];
+  if (character.vy >= 0 && character.isColliding(platform)) {
+    character.isOnPlatform = true;
+    character.jump();
+    character.y = platform.y - character.h;
+    currentPlatform = platform;  
+    
+    // Handle breaking platform logic
+    if (platform.breaking !== undefined && !platform.breaking) {
+      platform.startBreaking();
     }
+    break;
   }
+}
+
+// Handle breaking platform logic
+if (lastPlatform && lastPlatform.breaking && !lastPlatform.broken) {
+  if (lastPlatform !== currentPlatform) {
+    lastPlatform.break();
+  }
+}
+
+// Update lastPlatform for the next frame
+lastPlatform = currentPlatform;
+
   // Game in progress
   character.draw();
 
@@ -156,11 +176,13 @@ function mousePressed() {
     platformManager.init();
     scoredPlatforms = platformManager.getActivePlatforms().length;
     score = 0;
+    lastPlatform = null;  // Reset lastPlatform
   } else if (gameState === 2 && isMouseOnButton(125, 200, 150, 50)) {
     gameState = 1;
     character = new Character(50, 10, 50, 50);
     platformManager.init();
     scoredPlatforms = platformManager.getActivePlatforms().length;
     score = 0;
+    lastPlatform = null;  // Reset lastPlatform
   }
 }

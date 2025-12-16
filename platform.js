@@ -50,6 +50,7 @@ class BreakingPlatform extends Platform {
     constructor(x, y, w, h) {
         super(x, y, w, h);
         this.broken = false; 
+        this.breaking = false; 
     }
 
     show() {
@@ -58,6 +59,10 @@ class BreakingPlatform extends Platform {
             rect(this.x, this.y, this.w, this.h);
         }
     }
+    // Method to start the breaking process
+    startBreaking() {
+    this.breaking = true;
+}
 
     // Method to break the platform
     break() {

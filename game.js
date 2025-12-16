@@ -73,6 +73,11 @@ function draw() {
     textSize(40);
     textAlign(CENTER);
     text("Game Over!", 200, 150);
+
+    fill(255);
+    textSize(20);
+    text("Total Score: " + score, 200, 180);
+
     drawButton(125, 200, 150, 50, "Play Again");
     return;
   }

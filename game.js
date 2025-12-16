@@ -95,7 +95,7 @@ function draw() {
     let platform = activePlatforms[i];
     if (character.vy >= 0 && character.isColliding(platform)) {
       character.isOnPlatform = true;
-      character.vy = 0;
+      character.jump();
       character.y = platform.y - character.h;
       break;
     }

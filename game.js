@@ -32,7 +32,6 @@ function drawObstacle() {
 
 let canvasWidth = 400;
 let canvasHeight = 400;
-let floor = 300;
 let character = new Character(50, 10, 50, 50);
 
 function getPlatform() {
@@ -101,13 +100,6 @@ function draw() {
       break;
     }
   }
-
-  if (character.y + character.h >= floor) {
-    character.isOnPlatform = true;
-    character.vy = 0;
-    character.y = floor - character.h;
-  }
-
   // Game in progress
   character.draw();
 
@@ -120,8 +112,6 @@ function draw() {
   }
 
   platformManager.update(scroll);
-
-  line(0, floor, canvasWidth, floor);
 
   if (character.y > canvasHeight) {
     gameState = 2;

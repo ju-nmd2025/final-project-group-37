@@ -76,24 +76,6 @@ function draw() {
     return;
   }
 
-  // Check for collisions with platforms
-  character.isOnPlatform = false;
-  let activePlatforms = platformManager.getActivePlatforms();
-  for (let i = 0; i < activePlatforms.length; i++) {
-    if (character.isColliding(activePlatforms[i])) {
-      character.isOnPlatform = true;
-      character.vy = 0;
-      character.y = activePlatforms[i].y - character.h;
-      break;
-    }
-  }
-
-  if (character.y + character.h >= floor) {
-    character.isOnPlatform = true;
-    character.vy = 0;
-    character.y = floor - character.h;
-  }
-
   if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
     character.vx -= character.speed;
     character.moveLeft();
@@ -102,6 +84,30 @@ function draw() {
   if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
     character.vx += character.speed;
     character.moveRight();
+  }
+
+  character.vy += character.gravity;
+  character.y += character.vy;
+
+  character.isOnPlatform = false;
+
+  // Check for collisions with platforms
+
+  let activePlatforms = platformManager.getActivePlatforms();
+  for (let i = 0; i < activePlatforms.length; i++) {
+    let platform = activePlatforms[i];
+    if (character.vy >= 0 && character.isColliding(platform)) {
+      character.isOnPlatform = true;
+      character.vy = 0;
+      character.y = platform.y - character.h;
+      break;
+    }
+  }
+
+  if (character.y + character.h >= floor) {
+    character.isOnPlatform = true;
+    character.vy = 0;
+    character.y = floor - character.h;
   }
 
   character.update();
@@ -118,15 +124,6 @@ function draw() {
   }
 
   platformManager.update(scroll);
-
-  let platform = getPlatform();
-
-  if (
-    character.y + character.h < 300 &&
-    !(platform && character.isColliding(character, platform))
-  ) {
-    character.y += 10;
-  }
 
   line(0, floor, canvasWidth, floor);
 

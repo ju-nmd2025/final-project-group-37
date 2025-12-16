@@ -155,8 +155,6 @@ export default class Character {
     this.x += this.vx;
 
     this.vx *= 0.9; // Friction
-
-    this.x = constrain(this.x, 0, width - this.w);
   }
 
   isColliding(platform) {
@@ -168,9 +166,11 @@ export default class Character {
     let platformLeft = platform.x;
     let platformRight = platform.x + platform.w;
     let characterLeft = this.x;
+    let characterTop = this.y;
+    let platformBottom = platform.y + platform.h;
 
     let verticalCollision =
-      characterBottom >= platformTop && characterBottom - this.vy < platformTop;
+      characterBottom >= platformTop && characterTop < platformTop;
 
     let horizontalCollision =
       characterRight > platformLeft && characterLeft < platformRight;

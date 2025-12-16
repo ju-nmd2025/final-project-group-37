@@ -33,12 +33,12 @@ function drawObstacle() {
 let canvasWidth = 400;
 let canvasHeight = 400;
 let floor = 300;
-let character = new Character(50, 50, 50, 50);
+let character = new Character(50, 10, 50, 50);
 
 function getPlatform() {
   let active = platformManager.getActivePlatforms();
   for (let i = 0; i < active.length; i++) {
-    if (character.isColliding(character, active[i])) {
+    if (character.isColliding(active[i])) {
       return active[i];
     }
   }
@@ -86,9 +86,7 @@ function draw() {
     character.moveRight();
   }
 
-  character.vy += character.gravity;
-  character.y += character.vy;
-
+  character.update();
   character.isOnPlatform = false;
 
   // Check for collisions with platforms
@@ -109,8 +107,6 @@ function draw() {
     character.vy = 0;
     character.y = floor - character.h;
   }
-
-  character.update();
 
   // Game in progress
   character.draw();
@@ -147,11 +143,11 @@ function keyPressed() {
 function mousePressed() {
   if (gameState === 0 && isMouseOnButton(125, 200, 150, 50)) {
     gameState = 1;
-    character = new Character(50, 50, 50, 50);
+    character = new Character(50, 10, 50, 50);
     platformManager.init();
   } else if (gameState === 2 && isMouseOnButton(125, 200, 150, 50)) {
     gameState = 1;
-    character = new Character(50, 50, 50, 50);
+    character = new Character(50, 10, 50, 50);
     platformManager.init();
   }
 }

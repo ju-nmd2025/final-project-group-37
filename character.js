@@ -4,7 +4,14 @@ export default class Character {
     this.y = y;
     this.w = w;
     this.h = h;
-    //    this.isOnPlatForm = false;
+
+    this.speed = 3;
+    this.gravity = 0.6;
+    this.vx = 0;
+    this.vy = 0;
+    this.JumpStrength = -12;
+
+    this.isOnPlatform = false;
   }
 
   draw() {
@@ -124,15 +131,54 @@ export default class Character {
     // eyelids
   }
 
-  isColliding(character, platform) {
-    if (
-      platform.y === character.y + character.w &&
-      platform.x <= character.x + character.w
-    ) {
+  moveLeft() {
+    this.vx = -this.speed;
+    this.x += this.vx;
+    this.x = constrain(this.x, 0, width - this.w);
+  }
+
+  moveRight() {
+    this.vx = this.speed;
+    this.x += this.vx;
+    this.x = constrain(this.x, 0, width - this.w);
+  }
+  jump() {
+    if (this.isOnPlatform) {
+      this.vy = this.JumpStrength;
+      this.isOnPlatform = false;
+    }
+  }
+
+  update() {
+    this.vy += this.gravity;
+    this.y += this.vy;
+    this.x += this.vx;
+
+    this.vx *= 0.9; // Friction
+  }
+
+  isColliding(platform) {
+    // Collision detection with platforms
+
+    let characterBottom = this.y + this.h;
+    let platformTop = platform.y;
+    let characterRight = this.x + this.w;
+    let platformLeft = platform.x;
+    let platformRight = platform.x + platform.w;
+    let characterLeft = this.x;
+    let characterTop = this.y;
+    let platformBottom = platform.y + platform.h;
+
+    let verticalCollision =
+      characterBottom >= platformTop && characterTop < platformTop;
+
+    let horizontalCollision =
+      characterRight > platformLeft && characterLeft < platformRight;
+
+    if (verticalCollision && horizontalCollision) {
       return true;
     } else {
       return false;
     }
   }
 }
-

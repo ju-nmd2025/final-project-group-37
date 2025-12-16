@@ -2,7 +2,13 @@ import { platformManager } from "./platform";
 import Character from "./character";
 
 // Game state management
-let gameState = 0;  // 0: Start, 1: Playing, 2: Game Over
+let gameState = 0; // 0: Start, 1: Playing, 2: Game Over
+let score = 0; // starts counting the points from 0
+let scoredPlatforms = 0;
+
+// To track the last platform the character was on
+let lastPlatform = null;
+
 // Button drawing and interaction
 function drawButton(x, y, w, h, label) {
   fill(100, 200, 100);
@@ -16,7 +22,6 @@ function drawButton(x, y, w, h, label) {
 function isMouseOnButton(x, y, w, h) {
   return mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h;
 }
-
 
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
@@ -33,14 +38,13 @@ function drawObstacle() {
 
 let canvasWidth = 400;
 let canvasHeight = 400;
-let floor = 300;
-let character = new Character(50, 50, 50, 50);
+let character = new Character(50, 10, 50, 50);
 
 function getPlatform() {
   let active = platformManager.getActivePlatforms();
   for (let i = 0; i < active.length; i++) {
-    if (character.isColliding(character, active[i])) {
-      return active[i]; 
+    if (character.isColliding(active[i])) {
+      return active[i];
     }
   }
   return null;
@@ -48,25 +52,21 @@ function getPlatform() {
 
 // Main game loop
 function draw() {
-  background(100, 100, 100);// Grey background
+  background(100, 100, 100); // Grey background
 
   // Start screen
   if (gameState === 0) {
-    
     fill(255);
     textSize(40);
     textAlign(CENTER);
     text("Doodle Jump", 200, 100);
     textSize(16);
-    text("Press SPACE to jump", 200, 150);
-    textSize(16);
-    text("WASD to move", 200, 170);
+    text("Press WASD to move", 200, 150);
     drawButton(125, 200, 150, 50, "Start Game");
-    return;  
+    return;
   }
   // Game Over screen
   if (gameState === 2) {
-    
     character.draw();
     platformManager.update(0);
     fill(0, 0, 0, 150);
@@ -76,51 +76,95 @@ function draw() {
     textAlign(CENTER);
     text("Game Over!", 200, 150);
     drawButton(125, 200, 150, 50, "Play Again");
-    return;  
+    return;
   }
- 
+
+  push();
+  fill(255);
+  textSize(16);
+  textAlign(CENTER);
+  text("Score: " + Math.floor(score), 200, 30);
+  pop();
+
+  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+    character.vx -= character.speed;
+    character.moveLeft();
+  }
+
+  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+    character.vx += character.speed;
+    character.moveRight();
+  }
+
+  character.update();
+  character.isOnPlatform = false;
+
+  // Breaking platform logic
+  let currentPlatform = null; 
+// Track the platform the character is currently on
+let activePlatforms = platformManager.getActivePlatforms();
+for (let i = 0; i < activePlatforms.length; i++) {
+  let platform = activePlatforms[i];
+  if (character.vy >= 0 && character.isColliding(platform)) {
+    character.isOnPlatform = true;
+    character.jump();
+    character.y = platform.y - character.h;
+    currentPlatform = platform;  
+    
+    // Handle breaking platform logic
+    if (platform.breaking !== undefined && !platform.breaking) {
+      platform.startBreaking();
+    }
+    break;
+  }
+}
+
+// Handle breaking platform logic
+if (lastPlatform && lastPlatform.breaking && !lastPlatform.broken) {
+  if (lastPlatform !== currentPlatform) {
+    lastPlatform.break();
+  }
+}
+
+// Update lastPlatform for the next frame
+lastPlatform = currentPlatform;
 
   // Game in progress
   character.draw();
 
   let scroll = 0;
-  let cameraLine = 150; 
+  let cameraLine = 150;
 
   if (character.y < cameraLine) {
-    scroll = cameraLine - character.y; 
-    character.y = cameraLine;          
+    scroll = cameraLine - character.y;
+    character.y = cameraLine;
   }
 
   platformManager.update(scroll);
 
-  let platform = getPlatform();
+  let activeCount = platformManager.getActivePlatforms().length;
 
-  if (
-    character.y + character.h < 300 &&
-    !(platform && character.isColliding(character, platform))
-  ) {
-    character.y += 10;
+  if (scroll > 0) {
+    let removedPlatforms = scoredPlatforms - activeCount;
+    if (removedPlatforms > 0) {
+      score += removedPlatforms;
+    }
   }
+  scoredPlatforms = activeCount;
 
-  line(0, floor, canvasWidth, floor);
-  
-  
   if (character.y > canvasHeight) {
     gameState = 2;
   }
-  
 }
 // Handle key presses for jumping
 function keyPressed() {
   // Only allow jumping when game is in progress
   if (gameState !== 1) return;
- 
-  let platform = getPlatform();
-  if (
-    character.y + character.h === floor ||
-    (platform && character.isColliding(character, platform))
-  ) {
-    character.y -= 120;
+
+  if (character.isOnPlatform || character.y + character.h >= floor - 1) {
+    if (key === " " || key === "W" || key === "w" || keyCode === UP_ARROW) {
+      character.jump();
+    }
   }
 }
 
@@ -128,11 +172,17 @@ function keyPressed() {
 function mousePressed() {
   if (gameState === 0 && isMouseOnButton(125, 200, 150, 50)) {
     gameState = 1;
-    character = new Character(50, 50, 50, 50);
+    character = new Character(50, 10, 50, 50);
     platformManager.init();
+    scoredPlatforms = platformManager.getActivePlatforms().length;
+    score = 0;
+    lastPlatform = null;  // Reset lastPlatform
   } else if (gameState === 2 && isMouseOnButton(125, 200, 150, 50)) {
     gameState = 1;
-    character = new Character(50, 50, 50, 50);
+    character = new Character(50, 10, 50, 50);
     platformManager.init();
+    scoredPlatforms = platformManager.getActivePlatforms().length;
+    score = 0;
+    lastPlatform = null;  // Reset lastPlatform
   }
 }

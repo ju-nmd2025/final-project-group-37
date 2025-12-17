@@ -1,5 +1,5 @@
-import { platformManager } from "./platform";
-import Character from "./character";
+import { platformManager } from "./platform.js";
+import Character from "./character.js";
 
 // Game state management
 let gameState = 0; // 0: Start, 1: Playing, 2: Game Over

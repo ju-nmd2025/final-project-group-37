@@ -4,7 +4,7 @@ class Platform {
         this.y = y;  
         this.w = w;  
         this.h = h; 
-        this.active = true;  
+        this.active = true;  // Platform is active by default
     }
 
     // Update platform position based on scroll
@@ -22,13 +22,13 @@ class Platform {
 // Moving platform subclass
 class MovingPlatform extends Platform {
     constructor(x, y, w, h) {
-        super(x, y, w, h);  
-        this.speed = 2;    
-        this.dir = 1;      
+        super(x, y, w, h);  // Call parent constructor
+        this.speed = 2;    // Horizontal speed
+        this.dir = 1;      // Direction: 1 for right, -1 for left
     }
     // Override update method to include horizontal movement
     update(scroll) {
-        super.update(scroll);  
+        super.update(scroll);  // Call parent update for vertical movement
         
         // Move horizontally
         this.x += this.speed * this.dir;
@@ -48,13 +48,13 @@ class MovingPlatform extends Platform {
 // Breaking platform subclass
 export class BreakingPlatform extends Platform {
     constructor(x, y, w, h) {
-        super(x, y, w, h);
-        this.broken = false; 
-        this.breaking = false; 
+        super(x, y, w, h);  // Call parent constructor
+        this.broken = false;   // Platform starts unbroken
+        this.breaking = false; // Not breaking initially
     }
 
     show() {
-        if (!this.broken) {
+        if (!this.broken) {  // Only draw if not broken
             fill(200, 100, 100);  // Red color
             rect(this.x, this.y, this.w, this.h);
         }
@@ -85,7 +85,7 @@ export let platformManager = {
             this.platforms.push(this.createPlatform(y));
             y -= 60;  
         }
-    },
+    }, 
     
     // Factory method to create different types of platforms
     createPlatform(y) {
@@ -94,7 +94,7 @@ export let platformManager = {
         let h = 15;  
         let r = Math.random();  
         
-      
+        // Decide platform type based on random value
         if (r < 0.6) {
             return new Platform(x, y, w, h);
         } else if (r < 0.85) {
@@ -108,21 +108,21 @@ export let platformManager = {
     update(scroll) {
        
         for (let i = 0; i < this.platforms.length; i++) {
-            this.platforms[i].update(scroll);
-            this.platforms[i].show();
+            this.platforms[i].update(scroll); // Update position
+            this.platforms[i].show(); // Draw platform
         }
         
         // Remove platforms that have moved off screen
-        for (let i = this.platforms.length - 1; i >= 0; i--) {
+        for (let i = this.platforms.length - 1; i >= 0; i--) { // Iterate backwards for safe removal
             if (this.platforms[i].y > 450) {
-                this.platforms.splice(i, 1);
+                this.platforms.splice(i, 1);  // Remove off-screen platform
             }
         }
         
         // Add new platforms at the top
         if (this.platforms.length < 8) {
-            let topY = this.platforms[0].y - 60;
-            this.platforms.unshift(this.createPlatform(topY));
+            let topY = this.platforms[0].y - 60; // Position new platform above the highest one
+            this.platforms.unshift(this.createPlatform(topY)); // Add new platform at the start
         }
     },
     

@@ -34,7 +34,7 @@ function drawObstacle() {
 
 let canvasWidth = 400;
 let canvasHeight = 400;
-let character = new Character(50, 10, 50, 50);
+let character = new Character(50, 50, 50, 50);
 
 function getPlatform() {
   let active = platformManager.getActivePlatforms();
@@ -86,9 +86,10 @@ function draw() {
   fill(255);
   textSize(16);
   textAlign(CENTER);
-  text("Score: " + Math.floor(score), 200, 30);
+  text("Score: " + Math.floor(score), 200, 30); // Display score
   pop();
 
+  // Left and right character movement
   if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
     character.vx -= character.speed;
     character.moveLeft();
@@ -103,7 +104,6 @@ function draw() {
   character.isOnPlatform = false;
 
   // Check for collisions with platforms
-
   let activePlatforms = platformManager.getActivePlatforms();
   for (let i = 0; i < activePlatforms.length; i++) {
     let platform = activePlatforms[i];
@@ -156,13 +156,13 @@ function keyPressed() {
 function mousePressed() {
   if (gameState === 0 && isMouseOnButton(125, 200, 150, 50)) {
     gameState = 1;
-    character = new Character(50, 10, 50, 50);
+    character = new Character(50, 50, 50, 50);
     platformManager.init();
     score = 0;
     lastPlatform = null;
   } else if (gameState === 2 && isMouseOnButton(125, 200, 150, 50)) {
     gameState = 1;
-    character = new Character(50, 10, 50, 50);
+    character = new Character(50, 50, 50, 50);
     platformManager.init();
     score = 0;
     lastPlatform = null;

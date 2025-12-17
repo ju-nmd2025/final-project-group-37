@@ -46,7 +46,7 @@ class MovingPlatform extends Platform {
 }
 
 // Breaking platform subclass
-class BreakingPlatform extends Platform {
+export class BreakingPlatform extends Platform {
     constructor(x, y, w, h) {
         super(x, y, w, h);
         this.broken = false; 

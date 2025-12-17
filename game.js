@@ -1,4 +1,4 @@
-import { platformManager } from "./platform.js";
+import { platformManager, BreakingPlatform } from "./platform.js";
 import Character from "./character.js";
 
 // Game state management
@@ -101,26 +101,41 @@ function draw() {
   character.update();
   character.isOnPlatform = false;
 
-  // Check for collisions with platforms
+  // Platform collision detection
+  let currentPlatform = null;
+
   let activePlatforms = platformManager.getActivePlatforms();
   for (let i = 0; i < activePlatforms.length; i++) {
     let platform = activePlatforms[i];
     if (character.vy >= 0 && character.isColliding(platform)) {
       character.isOnPlatform = true;
+      currentPlatform = platform;
 
+      // Increase score only when landing on a new platform
       if (platform !== lastPlatform) {
         score++;
-        lastPlatform = platform;
+      }
+      // Start breaking if it's a breaking platform
+      if (platform.breaking !== undefined && !platform.breaking) {
+        platform.startBreaking();
       }
 
-      if (platform instanceof BreakingPlatform) {
-        platform.break();
-      }
-      if (platform) character.jump();
+      character.jump();
       character.y = platform.y - character.h;
       break;
     }
   }
+
+  // Handle breaking platforms
+  if (lastPlatform && lastPlatform.breaking && !lastPlatform.broken) {
+    if (lastPlatform !== currentPlatform) {
+      lastPlatform.break();
+    }
+  }
+
+  // Update lastPlatform for next frame
+  lastPlatform = currentPlatform;
+
   // Game in progress
   character.draw();
 

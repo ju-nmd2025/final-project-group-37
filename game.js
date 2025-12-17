@@ -1,4 +1,4 @@
-import { platformManager, BreakingPlatform } from "./platform.js";
+import { platformManager } from "./platform.js";
 import Character from "./character.js";
 
 // Game state management

@@ -131,6 +131,7 @@ export default class Character {
     // eyelids
   }
 
+  // Left and right movement methods
   moveLeft() {
     this.vx = -this.speed;
     this.x += this.vx;
@@ -142,6 +143,8 @@ export default class Character {
     this.x += this.vx;
     this.x = constrain(this.x, 0, width - this.w);
   }
+
+  // Jump method
   jump() {
     if (this.isOnPlatform) {
       this.vy = this.JumpStrength;
@@ -153,8 +156,6 @@ export default class Character {
     this.vy += this.gravity;
     this.y += this.vy;
     this.x += this.vx;
-
-    this.vx *= 0.9; // Friction
   }
 
   isColliding(platform) {

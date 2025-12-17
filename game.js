@@ -4,11 +4,7 @@ import Character from "./character";
 // Game state management
 let gameState = 0; // 0: Start, 1: Playing, 2: Game Over
 let score = 0; // starts counting the points from 0
-let scoredPlatforms = 0;
-
-// To track the last platform the character was on
 let lastPlatform = null;
-
 // Button drawing and interaction
 function drawButton(x, y, w, h, label) {
   fill(100, 200, 100);
@@ -38,7 +34,7 @@ function drawObstacle() {
 
 let canvasWidth = 400;
 let canvasHeight = 400;
-let character = new Character(50, 10, 50, 50);
+let character = new Character(50, 50, 50, 50);
 
 function getPlatform() {
   let active = platformManager.getActivePlatforms();
@@ -75,6 +71,11 @@ function draw() {
     textSize(40);
     textAlign(CENTER);
     text("Game Over!", 200, 150);
+
+    fill(255);
+    textSize(20);
+    text("Total Score: " + score, 200, 180);
+
     drawButton(125, 200, 150, 50, "Play Again");
     return;
   }
@@ -83,9 +84,10 @@ function draw() {
   fill(255);
   textSize(16);
   textAlign(CENTER);
-  text("Score: " + Math.floor(score), 200, 30);
+  text("Score: " + Math.floor(score), 200, 30); // Display score
   pop();
 
+  // Left and right character movement
   if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
     character.vx -= character.speed;
     character.moveLeft();
@@ -99,36 +101,26 @@ function draw() {
   character.update();
   character.isOnPlatform = false;
 
-  // Breaking platform logic
-  let currentPlatform = null; 
-// Track the platform the character is currently on
-let activePlatforms = platformManager.getActivePlatforms();
-for (let i = 0; i < activePlatforms.length; i++) {
-  let platform = activePlatforms[i];
-  if (character.vy >= 0 && character.isColliding(platform)) {
-    character.isOnPlatform = true;
-    character.jump();
-    character.y = platform.y - character.h;
-    currentPlatform = platform;  
-    
-    // Handle breaking platform logic
-    if (platform.breaking !== undefined && !platform.breaking) {
-      platform.startBreaking();
+  // Check for collisions with platforms
+  let activePlatforms = platformManager.getActivePlatforms();
+  for (let i = 0; i < activePlatforms.length; i++) {
+    let platform = activePlatforms[i];
+    if (character.vy >= 0 && character.isColliding(platform)) {
+      character.isOnPlatform = true;
+
+      if (platform !== lastPlatform) {
+        score++;
+        lastPlatform = platform;
+      }
+
+      if (platform instanceof BreakingPlatform) {
+        platform.break();
+      }
+      if (platform) character.jump();
+      character.y = platform.y - character.h;
+      break;
     }
-    break;
   }
-}
-
-// Handle breaking platform logic
-if (lastPlatform && lastPlatform.breaking && !lastPlatform.broken) {
-  if (lastPlatform !== currentPlatform) {
-    lastPlatform.break();
-  }
-}
-
-// Update lastPlatform for the next frame
-lastPlatform = currentPlatform;
-
   // Game in progress
   character.draw();
 
@@ -141,16 +133,6 @@ lastPlatform = currentPlatform;
   }
 
   platformManager.update(scroll);
-
-  let activeCount = platformManager.getActivePlatforms().length;
-
-  if (scroll > 0) {
-    let removedPlatforms = scoredPlatforms - activeCount;
-    if (removedPlatforms > 0) {
-      score += removedPlatforms;
-    }
-  }
-  scoredPlatforms = activeCount;
 
   if (character.y > canvasHeight) {
     gameState = 2;
@@ -172,17 +154,15 @@ function keyPressed() {
 function mousePressed() {
   if (gameState === 0 && isMouseOnButton(125, 200, 150, 50)) {
     gameState = 1;
-    character = new Character(50, 10, 50, 50);
+    character = new Character(50, 50, 50, 50);
     platformManager.init();
-    scoredPlatforms = platformManager.getActivePlatforms().length;
     score = 0;
-    lastPlatform = null;  // Reset lastPlatform
+    lastPlatform = null; // Reset lastPlatform
   } else if (gameState === 2 && isMouseOnButton(125, 200, 150, 50)) {
     gameState = 1;
-    character = new Character(50, 10, 50, 50);
+    character = new Character(50, 50, 50, 50);
     platformManager.init();
-    scoredPlatforms = platformManager.getActivePlatforms().length;
     score = 0;
-    lastPlatform = null;  // Reset lastPlatform
+    lastPlatform = null; // Reset lastPlatform
   }
 }

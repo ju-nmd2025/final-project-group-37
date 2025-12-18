@@ -16,7 +16,7 @@ function drawButton(x, y, w, h, label) {
 }
 // Check if mouse is over button
 function isMouseOnButton(x, y, w, h) {
-  return mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h;
+  return mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h; // Returns true if mouse is within button bounds
 }
 
 function setup() {
@@ -24,14 +24,7 @@ function setup() {
   platformManager.init();
 }
 
-// Obstacle / Spike / Death
-function drawObstacle() {
-  push();
-  fill("red");
-  triangle(180, 300, 210, 240, 240, 300);
-  pop();
-}
-
+// Canvas dimensions
 let canvasWidth = 400;
 let canvasHeight = 400;
 let character = new Character(50, 50, 50, 50);
@@ -61,10 +54,11 @@ function draw() {
     drawButton(125, 200, 150, 50, "Start Game");
     return;
   }
+
   // Game Over screen
   if (gameState === 2) {
     character.draw();
-    platformManager.update(0);
+    platformManager.update(0); // No scrolling on game over
     fill(0, 0, 0, 150);
     rect(0, 0, 400, 400);
     fill(255, 0, 0);
@@ -80,7 +74,7 @@ function draw() {
     return;
   }
 
-  push();
+  push(); 
   fill(255);
   textSize(16);
   textAlign(CENTER);
@@ -116,7 +110,7 @@ function draw() {
         score++;
       }
       // Start breaking if it's a breaking platform
-      if (platform.breaking !== undefined && !platform.breaking) {
+      if (platform.breaking !== undefined && !platform.breaking) { // Check if platform is a BreakingPlatform
         platform.startBreaking();
       }
 
@@ -127,7 +121,7 @@ function draw() {
   }
 
   // Handle breaking platforms
-  if (lastPlatform && lastPlatform.breaking && !lastPlatform.broken) {
+  if (lastPlatform && lastPlatform.breaking && !lastPlatform.broken) { // If lastPlatform is breaking and not yet broken
     if (lastPlatform !== currentPlatform) {
       lastPlatform.break();
     }
@@ -142,12 +136,13 @@ function draw() {
   let scroll = 0;
   let cameraLine = 150;
 
+  // Scroll the screen up when character reaches camera line
   if (character.y < cameraLine) {
     scroll = cameraLine - character.y;
     character.y = cameraLine;
   }
 
-  platformManager.update(scroll);
+  platformManager.update(scroll); // Update and draw platforms
 
   if (character.y > canvasHeight) {
     gameState = 2;
@@ -182,14 +177,10 @@ function mousePressed() {
   }
 }
 
-window.setup = setup;
+window.setup = setup; // Attach setup to window
 
-window.draw = draw;
+window.draw = draw;  // Attach draw to window
 
-window.addEventListener("click", function (event) {
-  mousePressed();
-});
+window.mousePressed = mousePressed;  // Attach mousePressed to window
 
-window.addEventListener("keydown", function (event) {
-  keyPressed();
-});
+window.keyPressed = keyPressed;  // Attach keyPressed to window

@@ -106,7 +106,8 @@ export let platformManager = {
     
     // Update all platforms
     update(scroll) {
-       
+        
+        // Update and draw each platform
         for (let i = 0; i < this.platforms.length; i++) {
             this.platforms[i].update(scroll); // Update position
             this.platforms[i].show(); // Draw platform

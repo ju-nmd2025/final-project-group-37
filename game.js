@@ -29,16 +29,6 @@ let canvasWidth = 400;
 let canvasHeight = 400;
 let character = new Character(50, 50, 50, 50);
 
-function getPlatform() {
-  let active = platformManager.getActivePlatforms();
-  for (let i = 0; i < active.length; i++) {
-    if (character.isColliding(active[i])) {
-      return active[i];
-    }
-  }
-  return null;
-}
-
 // Main game loop
 function draw() {
   background(100, 100, 100); // Grey background
@@ -74,7 +64,7 @@ function draw() {
     return;
   }
 
-  push(); 
+  push();
   fill(255);
   textSize(16);
   textAlign(CENTER);
@@ -110,7 +100,8 @@ function draw() {
         score++;
       }
       // Start breaking if it's a breaking platform
-      if (platform.breaking !== undefined && !platform.breaking) { // Check if platform is a BreakingPlatform
+      if (platform.breaking !== undefined && !platform.breaking) {
+        // Check if platform is a BreakingPlatform
         platform.startBreaking();
       }
 
@@ -121,7 +112,8 @@ function draw() {
   }
 
   // Handle breaking platforms
-  if (lastPlatform && lastPlatform.breaking && !lastPlatform.broken) { // If lastPlatform is breaking and not yet broken
+  if (lastPlatform && lastPlatform.breaking && !lastPlatform.broken) {
+    // If lastPlatform is breaking and not yet broken
     if (lastPlatform !== currentPlatform) {
       lastPlatform.break();
     }
@@ -179,8 +171,8 @@ function mousePressed() {
 
 window.setup = setup; // Attach setup to window
 
-window.draw = draw;  // Attach draw to window
+window.draw = draw; // Attach draw to window
 
-window.mousePressed = mousePressed;  // Attach mousePressed to window
+window.mousePressed = mousePressed; // Attach mousePressed to window
 
-window.keyPressed = keyPressed;  // Attach keyPressed to window
+window.keyPressed = keyPressed; // Attach keyPressed to window
